@@ -20,6 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'bodypix = cti_image.bodypix:main',
+            'image_viewer = cti_image.image_viewer:main',
         ],
     },
 )
