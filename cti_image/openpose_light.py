@@ -110,10 +110,10 @@ class OpenPoseLight(Node):
     
     
     def imageFormat(self, img, net_input_height_size, stride, pad_value, img_mean, img_scale):
-        """!
+        '''!
             Formata a imagem para o formato necessário para a rede
             
-        """
+        '''
 
         height, width, _ = img.shape
         scale = net_input_height_size / height
@@ -125,16 +125,25 @@ class OpenPoseLight(Node):
         
         return padded_img, scale, pad
     
-    def do_inference(self, img, upsample_ratio, padded_img):
-        
-        #@todo transferir para o tipo certo
+    def do_inference(self, upsample_ratio, padded_img):
+        '''!
+            Realiza a inferência.
+
+            Paramêtros:
+                @param upsample_ratio - Tava de redimensionamento
+                @param padded_img (numpy array) - Imagem Formatada
+
+            Retorno:
+                @return heatmap - Heatmap de onde estão keypoints
+                @return pafs - 
+                
+        '''
+
         tensor_img = torch.from_numpy(padded_img).permute(2, 0, 1).unsqueeze(0).float()
         
-        #@todo se gpu, enviar para gpu
         if self.gpu:
             tensor_img = tensor_img.cuda()
         
-        #@todo realizar inferencia
         stages_output = self.net(tensor_img)
 
         stage2_heatmaps = stages_output[-2]
@@ -149,14 +158,39 @@ class OpenPoseLight(Node):
     
     def inference(self, img, net_input_height_size, stride, upsample_ratio,
                pad_value=(0, 0, 0), img_mean=np.array([128, 128, 128], np.float32), img_scale=np.float32(1/256)):
-        
-        #@todo normalizar/cortar/etc a imagem
+        '''!
+            Formata a imagem original para realizar a infêrencia.
+
+            Paramêtros:
+                @param img (numpy array) - Imagem Original
+                @param net_input_height_size - Dimensão de altura do input da rede
+                @param stride - 
+                @param upsample_ratio - 
+
+            Retorno:
+                @return heatmap - Heatmap de onde estão keypoints
+                @return pafs -
+                @return scale - Escala da Imagem modificada
+                @return pad - 
+                
+        '''
+
         padded_img, scale, pad = self.imageFormat(img, net_input_height_size, stride, pad_value, img_mean, img_scale)
         
         heatmaps, pafs = self.do_inference(img, upsample_ratio, padded_img)  
         return heatmaps, pafs, scale, pad
 
     def getPose(self, img, height_size=256):
+        '''!
+            Realiza a inferência e gera o vetor de poses corporais.
+
+            Parâmetros
+                @param img (numpy array) - imagem para realizar a inferência
+                @param height_size (int)
+
+            Retorno
+                @return poses (list) - vetor de poses
+        '''
            
         stride = 8
         upsample_ratio = 4
