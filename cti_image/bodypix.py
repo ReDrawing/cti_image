@@ -18,10 +18,10 @@ class BodyPixROS(Node):
 
     def __init__(self):
         super().__init__('bodypix')
-        self.pubMask = self.create_publisher(Image, "image_raw/body_mask", 10)
-        self.colMask = self.create_publisher(Image, "image_raw/colored_body_mask", 10)
+        self.pubMask = self.create_publisher(Image, "user/body_mask", 10)
+        self.colMask = self.create_publisher(Image, "user/colored_body_mask", 10)
 
-        self.subImg = self.create_subscription(Image, "image_raw/image", self.imageCallback, 10)
+        self.subImg = self.create_subscription(Image, "camera/image", self.imageCallback, 10)
 
         self.bodypix_model = load_model(download_model(
             BodyPixModelPaths.MOBILENET_FLOAT_100_STRIDE_16

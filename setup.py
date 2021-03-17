@@ -25,7 +25,8 @@ setup(
         'console_scripts': [
             'bodypix = cti_image.bodypix:main',
             'image_viewer = cti_image.image_viewer:main',
-            'openpose_light = cti_image.openpose_light:main', 
+            'openpose_light = cti_image.openpose_light:main',
+            'body_viewer = cti_image.body_viewer:main',
         ],
     },
 )

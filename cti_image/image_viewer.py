@@ -13,9 +13,9 @@ class ImageViewer(Node):
     '''
 
     def __init__(self):
-        super().__init__('bodypix')
+        super().__init__('image_viewer')
 
-        self.subImg = self.create_subscription(Image, "image_raw/image", self.imageCallback, 10)
+        self.subImg = self.create_subscription(Image, "camera/image", self.imageCallback, 10)
 
 
     def imageCallback(self, msg):

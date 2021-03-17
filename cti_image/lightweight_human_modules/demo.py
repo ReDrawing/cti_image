@@ -10,7 +10,7 @@ from modules.load_state import load_state
 from modules.pose import Pose, track_poses
 from val import normalize, pad_width
 
-
+#
 class ImageReader(object):
     def __init__(self, file_names):
         self.file_names = file_names
